@@ -1,0 +1,3 @@
+#ignore configuration files
+GameStore.Api/appsettings.Development.json
+GameStore.Api/appsettings.json
