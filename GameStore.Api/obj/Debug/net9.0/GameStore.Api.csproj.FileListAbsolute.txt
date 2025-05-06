@@ -26,3 +26,4 @@
 /home/ummer/Desktop/practice/csharp/GameStore/GameStore.Api/obj/Debug/net9.0/GameStore.Api.pdb
 /home/ummer/Desktop/practice/csharp/GameStore/GameStore.Api/obj/Debug/net9.0/GameStore.Api.genruntimeconfig.cache
 /home/ummer/Desktop/practice/csharp/GameStore/GameStore.Api/obj/Debug/net9.0/ref/GameStore.Api.dll
+/home/ummer/Desktop/practice/csharp/GameStore/GameStore.Api/obj/Debug/net9.0/GameStore.Api.sourcelink.json

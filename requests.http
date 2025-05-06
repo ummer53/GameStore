@@ -1,0 +1,35 @@
+#request all games
+http://localhost:5086/games
+
+
+###request game by id
+http://localhost:5086/games/4
+
+
+###create new game
+POST http://localhost:5086/games
+Content-Type: application/json
+
+{
+    "name": "Game 5",
+    "genre": "RPG",
+    "price": 49.99,
+    "releaseDate": "2023-03-01"
+}
+
+
+### Edit the game
+PUT  http://localhost:5086/games/1
+Content-Type: application/json
+
+{
+    "name": "Game 11",
+    "genre": "RPG1",
+    "price": 49.999,
+    "releaseDate": "2023-03-01"
+}
+
+
+
+### Delete the game
+DELETE http://localhost:5086/games/1
