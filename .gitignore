@@ -1,3 +1,4 @@
 #ignore configuration files
 GameStore.Api/appsettings.Development.json
 GameStore.Api/appsettings.json
+GameStore.Api/bin/Debug/net9.0/appsettings.Development.json
