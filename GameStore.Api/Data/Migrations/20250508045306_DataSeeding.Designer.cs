@@ -3,6 +3,7 @@ using System;
 using GameStore.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GameStore.Api.Data.Migrations
 {
     [DbContext(typeof(GameStoreContext))]
-    partial class GameStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20250508045306_DataSeeding")]
+    partial class DataSeeding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,7 +50,7 @@ namespace GameStore.Api.Data.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("games", (string)null);
+                    b.ToTable("Games");
 
                     b.HasData(
                         new
@@ -114,7 +117,7 @@ namespace GameStore.Api.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("genre", (string)null);
+                    b.ToTable("Genres");
 
                     b.HasData(
                         new

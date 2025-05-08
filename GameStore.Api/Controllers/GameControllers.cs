@@ -1,5 +1,8 @@
 using System;
+using GameStore.Api.Data;
 using GameStore.Api.Dtos;
+using GameStore.Api.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Api.Controllers;
 
@@ -17,40 +20,62 @@ public static class GameControllers
         var group = app.MapGroup("games")
                         .WithParameterValidation();
 
-        group.MapGet("/", () =>
+        group.MapGet("/", (GameStoreContext dbContext) =>
         {
+            var games = dbContext.Games.Include(g => g.Genre).ToList();
             return Results.Ok(games);
         });
 
-        group.MapGet("/{id}", (int id) =>
+        group.MapGet("/{id}", (int id, GameStoreContext dbContext) =>
         {
-            var game = games.Find(game => game.Id == id);
+            var game = dbContext.Games.Include(g => g.Genre)
+                .FirstOrDefault(g => g.Id == id);
+
             return game != null ? Results.Ok(game) : Results.NotFound("Game not found");
         }).WithName("GetGameById");
 
-        group.MapPost("/", (CreateGameDto gameDto) =>
+        group.MapPost("/", (CreateGameDto gameDto, GameStoreContext dbContext) =>
         {
-            var newGame = new GameDto(games.Count + 1, gameDto.Name, gameDto.Genre, gameDto.Price, gameDto.ReleaseDate);
-            games.Add(newGame);
+            var newGame = new Game
+            {
+                Name = gameDto.Name,
+                GenreId = gameDto.GenreId,
+                Price = gameDto.Price,
+                ReleaseDate = gameDto.ReleaseDate
+            };
+            dbContext.Games.Add(newGame);
+            dbContext.SaveChanges();
             return Results.CreatedAtRoute("GetGameById", new { id = newGame.Id });
         });
 
-        group.MapPut("/{id}", (int id, CreateGameDto gameDto) =>
+        group.MapPut("/{id}", (int id, CreateGameDto gameDto, GameStoreContext dbContext) =>
         {
-            var gameIndex = games.FindIndex(game => game.Id == id);
-            if (gameIndex == -1)
+            var game = dbContext.Games
+            .Include(g => g.Genre)
+            .FirstOrDefault(g => g.Id == id);
+            if (game == null)
             {
                 return Results.NotFound("Game not found");
             }
-
-            var game = new GameDto(id, gameDto.Name, gameDto.Genre, gameDto.Price, gameDto.ReleaseDate);
-            games[gameIndex] = game;
-            return Results.Ok(game);
+            game.Name = gameDto.Name;
+            game.GenreId = gameDto.GenreId;
+            game.Price = gameDto.Price;
+            game.ReleaseDate = gameDto.ReleaseDate;
+            dbContext.Games.Update(game);
+            dbContext.SaveChanges();
+            return Results.NoContent();
         });
 
-        group.MapDelete("/{id}", (int id) =>
+        group.MapDelete("/{id}", (int id, GameStoreContext dbContext) =>
         {
-            games.RemoveAll(game => game.Id == id);
+            var game = dbContext.Games.Include(g => g.Genre)
+                .FirstOrDefault(g => g.Id == id);
+            if (game == null)
+            {
+                return Results.NotFound("Game not found");
+            }
+            dbContext.Games.Remove(game);
+            dbContext.SaveChanges();
             return Results.NoContent();
         });
 
